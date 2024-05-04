@@ -35,11 +35,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.example.unifood.conf.Navigation
 import com.example.unifood.screens.Forget_Password.email_forgot
 import com.example.unifood.screens.Forget_Password.modify_password
 import com.example.unifood.screens.Forget_Password.modify_success
 import com.example.unifood.screens.Forget_Password.send_success
+import com.example.unifood.screens.dashboard.dash
 import com.example.unifood.screens.home_page
 import com.example.unifood.ui.theme.UniFoodTheme
 
@@ -54,7 +56,9 @@ class MainActivity : ComponentActivity() {
                 //send_success()
                //modify_success()
                //email_forgot()
-                Navigation()
+                //Navigation()
+
+                dash()
             }
         }
     }
