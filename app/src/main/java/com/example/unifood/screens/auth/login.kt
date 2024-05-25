@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.unifood.screens.dashboard.dash
 
 @Composable
 fun login(){
@@ -21,5 +22,6 @@ fun login(){
 
     ) {
         Text(text = "Login page")
+
     }
 }
