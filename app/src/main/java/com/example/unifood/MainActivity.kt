@@ -11,8 +11,7 @@ import com.example.unifood.conf.Navigation
 import com.example.unifood.conf.UserRepository
 import com.example.unifood.model.Meal
 import com.example.unifood.model.User
-import com.example.unifood.screens.dashboard.DisplayMeals
-import com.example.unifood.screens.dashboard.home_test
+import com.example.unifood.screens.dashboard.home
 import com.example.unifood.ui.theme.UniFoodTheme
 import retrofit2.Call
 import retrofit2.Response

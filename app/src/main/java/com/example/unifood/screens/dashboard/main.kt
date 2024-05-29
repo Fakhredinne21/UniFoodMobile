@@ -50,6 +50,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.unifood.R
 import com.example.unifood.conf.MealRepository
+import com.example.unifood.conf.UserRepository
+import com.example.unifood.model.User
 import com.example.unifood.screens.Forget_Password.email_forgot
 import com.example.unifood.screens.Forget_Password.modify_password
 import com.example.unifood.screens.Forget_Password.modify_success
@@ -60,7 +62,7 @@ import com.example.unifood.screens.home_page
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun dash(navController: NavController,mealRepository: MealRepository){
+fun dash(navController: NavController,mealRepository: MealRepository, userRepository: UserRepository,user : User){
     val context = LocalContext.current
     val startForResult = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -89,7 +91,7 @@ fun dash(navController: NavController,mealRepository: MealRepository){
             unselectedIcon= ImageVector.vectorResource(id= R.drawable.wallet),
             selectedIcon = ImageVector.vectorResource(id= R.drawable.walletgreen),
             hasNews = false,
-            badgeCount = 15,
+            badgeCount = 0,
             destination = Screen.MainScreen.route
 
         ) ,
@@ -123,6 +125,7 @@ fun dash(navController: NavController,mealRepository: MealRepository){
         var selectedTabIndex by remember {
             mutableIntStateOf(0)
         }
+
         val pagerState= rememberPagerState {
             navItems.size
         }
@@ -205,17 +208,17 @@ fun dash(navController: NavController,mealRepository: MealRepository){
             )
             {
                 when (selectedTabIndex) {
-                    0 -> home_test(mealRepository)// Your home screen content (already exists)
+                    0 -> home(mealRepository,user,userRepository)// Your home screen content (already exists)
                     // Create this for profile content
                     // Add more cases for other screens (if applicable)
-                    1->send_success()
+                    1-> wallet(user,userRepository)
                     2->{
                         val integrator = IntentIntegrator(LocalContext.current as Activity)
-                        integrator.setOrientationLocked(true) // Lock the orientation
+                        integrator.setOrientationLocked(false) // Lock the orientation
                         startForResult.launch(integrator.createScanIntent()) // Start the QR code scanner
                     } // Start the QR code scanner
 
-                    3->modify_success()
+                    3-> profile(user)
                 }
 
 

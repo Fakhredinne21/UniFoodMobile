@@ -18,6 +18,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,9 +43,12 @@ import com.example.unifood.components.sub_btn
 import com.example.unifood.conf.MealRepository
 import com.example.unifood.conf.UserRepository
 import com.example.unifood.model.User
+import com.example.unifood.screens.dashboard.dash
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,7 +134,7 @@ fun home_page(navController: NavController,mealRepository: MealRepository,UserRe
                             modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         placeholder={
-                            Text(text = "Eg namaemail@emailkamu.com")
+                            Text(text = "Unifood User")
                             colorResource(id = R.color.small_text)
                         }
                     )
@@ -145,7 +150,7 @@ fun home_page(navController: NavController,mealRepository: MealRepository,UserRe
                         modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(10.dp),
                             placeholder={
-                                Text(text = "Eg namaemail@emailkamu.com")
+                                Text(text = "Unifooduser@unifood.tn")
                                 colorResource(id = R.color.small_text)
                             }
                         )
@@ -160,9 +165,10 @@ fun home_page(navController: NavController,mealRepository: MealRepository,UserRe
                             modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         placeholder={
-                            Text(text = "Eg namaemail@emailkamu.com")
+                            Text(text = "Password")
                             colorResource(id = R.color.small_text)
-                        }
+                        },
+                        visualTransformation = PasswordVisualTransformation()
                     )
 
 
@@ -173,6 +179,7 @@ fun home_page(navController: NavController,mealRepository: MealRepository,UserRe
                             CoroutineScope(Dispatchers.IO).launch {
                                 UserRepository.createUser(fullName, emailAddress, password)
                             }
+                            isSheetOpen = false
 
 
                         },
@@ -214,6 +221,7 @@ fun home_page(navController: NavController,mealRepository: MealRepository,UserRe
                 )
 
         }
+        var USER = User()
         if(isLoginSheetOpen){
             ModalBottomSheet(
                 sheetState = loginState,
@@ -240,9 +248,9 @@ fun home_page(navController: NavController,mealRepository: MealRepository,UserRe
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         placeholder = {
-                            Text(
-                                text = "Eg"
-                            )
+                            Text(text = "Unifooduser@unifood.tn")
+                            colorResource(id = R.color.small_text)
+
                         }
                     )
                     Text(
@@ -256,25 +264,35 @@ fun home_page(navController: NavController,mealRepository: MealRepository,UserRe
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         placeholder = {
-                            Text(text = "Eg namaemail@emailkamu.com")
+                            Text(text = "Password")
                             colorResource(id = R.color.small_text)
-                        }
+                        },
+                        visualTransformation = PasswordVisualTransformation(),
+
                     )
                     Spacer(modifier = Modifier.height(10.dp))
+
                     Button(
                         onClick = {
                             CoroutineScope(Dispatchers.IO).launch {
-
-                                 var user =UserRepository.loginUser(emailAddress, password)
+                                val user = UserRepository.loginUser(emailAddress, password)
                                 if(user.isSuccess){
-                                    val USER= user.getOrThrow()!!
-                                    if(USER.userId != null){
-                                        println(USER.toString())
+                                    val USER = user.getOrThrow()!!
+                                    if(USER.email != ""){
+                                        withContext(Dispatchers.Main) {
+                                            navController.navigate(Screen.Dash.route +"/${USER.email}")
+                                        }
+                                    }
+                                }else{
+                                    withContext(Dispatchers.Main) {
+                                        isLoginSheetOpen = false
                                     }
 
                                 }
                             }
                         },
+
+
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(colorResource(id = R.color.register_color)),
                         enabled = true,
@@ -299,5 +317,6 @@ fun home_page(navController: NavController,mealRepository: MealRepository,UserRe
             , fontSize = 12.sp
         )
     }
+
 
 }

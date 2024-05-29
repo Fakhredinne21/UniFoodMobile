@@ -4,7 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Ticket (
-    var mealId:String="",
-    var description:String="",
-    var price:String="",
+    var id:Long,
+    var price:Int,
+    var state:Boolean,
+    var number:Int,
+    var Date:String,
 )

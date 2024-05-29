@@ -10,4 +10,5 @@
     <color name="login_color">#FFD1FAE5</color>
     <color name="register_color">#FF32B768</color>
     <color name="small_text">#FF9CA3AF</color>
+    <color name="logout_color">#FFEB4646</color>
 </resources>
